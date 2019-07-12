@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.esehl.ann.format</id>
   <name>AnnFormat</name>
-  <version>1.02</version>
+  <version>1.03</version>
   <vendor email="support@test.com" url="http://www.test.com">Eshel</vendor>
 
   <description><![CDATA[
@@ -9,8 +9,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      新增写入文档注释时写入参数描述<br>
-      <em>most HTML tags may be used</em>
+      1.0.3: 修复get未加static的BUG
     ]]>
   </change-notes>
 
