@@ -9,7 +9,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      1.0.3: 修复get未加static的BUG
+      1.0.4: 修复get未加static的BUG
     ]]>
   </change-notes>
 
