@@ -57,4 +57,15 @@ public class Util {
         }
         return null;
     }
+
+    //获取数组 array 中 object 的角标
+    public static int indexOf(Object[] array, Object object){
+        if(array == null)
+            return -1;
+        for (int i = 0; i < array.length; i++) {
+            if(array[i] == object)
+                return i;
+        }
+        return -1;
+    }
 }
