@@ -10,8 +10,8 @@ import java.util.Vector;
 /**
  * Created by EshelGuo on 2019/7/12.
  */
+@Deprecated
 public class TableView extends JTable{
-
 
     public TableView() {
         init();

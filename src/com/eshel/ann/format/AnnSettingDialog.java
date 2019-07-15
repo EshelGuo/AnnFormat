@@ -13,6 +13,10 @@ public class AnnSettingDialog extends JDialog {
     private JRadioButton rbDocComment;
     private JRadioButton rbLineComment;
     private JTable table;
+    private JButton lineDown;
+    private JButton btnInsert;
+    private JTextField etInsertNumber;
+    private JButton lineUp;
     private final AnnSetting setting;
     private AnnSettingTableModel adapter;
 
@@ -22,17 +26,23 @@ public class AnnSettingDialog extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
+        buttonOK.addActionListener(e -> onOK());
+        buttonCancel.addActionListener(e -> onCancel());
+        lineDown.addActionListener(e -> adapter.lineDown());
+        lineUp.addActionListener(e -> adapter.lineUp());
+        btnInsert.addActionListener(e -> {
+            try{
+                String text = etInsertNumber.getText();
+                Integer position = Integer.valueOf(text);
+                adapter.insertLine(position);
+            }catch (Exception ex){
+                ex.printStackTrace();
             }
         });
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
+        lineDown.setToolTipText("所有数据都下移一行");
+        lineUp.setToolTipText("所有数据都上移一行, 删除遇到的第一个空行");
+        btnInsert.setToolTipText("在第n行后插入1条数据, 如需在第一行前边插入请输入0");
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -43,11 +53,7 @@ public class AnnSettingDialog extends JDialog {
         });
 
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         ButtonGroup group = new ButtonGroup();
         group.add(rbDocComment);
@@ -67,12 +73,7 @@ public class AnnSettingDialog extends JDialog {
                 setting.useSignLineDoc = false;
         });
         cbUseConst.setSelected(setting.useConst);
-        cbUseConst.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                setting.useConst = e.getStateChange() == ItemEvent.SELECTED;
-            }
-        });
+        cbUseConst.addItemListener(e -> setting.useConst = e.getStateChange() == ItemEvent.SELECTED);
         initTable();
     }
 
@@ -81,12 +82,12 @@ public class AnnSettingDialog extends JDialog {
         adapter = new AnnSettingTableModel();
         table.setModel(adapter);
         adapter.addData(setting.typeMap);
-        adapter.addEmptyData(5);
+        adapter.addEmptyDataToLast(5);
     }
 
     private void onOK() {
         // add your code here
-        List<AnnSettingTableModel.Table> data = adapter.getData();
+        List<AnnSettingTableModel.Table> data = adapter.getDatas();
         setting.typeMap = toMap(data);
         setting.save();
         dispose();

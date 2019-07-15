@@ -83,7 +83,7 @@ public abstract class BaseTableModel<T extends TableData> extends AbstractTableM
             T next = it.next();
             if(isEmptyData(next)){
                 it.remove();
-                return;
+                break;
             }
         }
         fireTableDataChanged();
@@ -206,17 +206,28 @@ public abstract class BaseTableModel<T extends TableData> extends AbstractTableM
     }
 
     @Override
-    public int getRowCount() {
+    public final int getRowCount() {
         if(mData == null)
             return 0;
         return mData.size();
     }
 
     @Override
-    public int getColumnCount() {
+    public final int getColumnCount() {
         if(mTitle == null)
             return 0;
         return mTitle.size();
+    }
+
+    @Override
+    public final String getColumnName(int column) {
+        if(mTitle.isEmpty())
+            return "";
+        String name = mTitle.get(column).name;
+        if(name == null)
+            name = "";
+
+        return name;
     }
 
     @Override
@@ -246,7 +257,7 @@ public abstract class BaseTableModel<T extends TableData> extends AbstractTableM
         return null;
     }
 
-    protected void setValueAt(T data, Object value, int index, Name annotation){
+    protected void setValueAt(T data, Object value, int index, Name annotation, int position){
         if(data == null)
             return;
         Field field = mTitle.get(index).field;
@@ -262,7 +273,8 @@ public abstract class BaseTableModel<T extends TableData> extends AbstractTableM
     @Override
     public final void setValueAt(Object value, int position, int index) {
         T data = mData.get(position);
-        setValueAt(data, value, index, mTitle.get(index).field.getAnnotation(Name.class));
+        setValueAt(data, value, index, mTitle.get(index).field.getAnnotation(Name.class), position);
+        fireTableCellUpdated(position, index);
     }
 
     @Override
