@@ -38,7 +38,7 @@ public class AnnFormatDialog extends JDialog {
 
     private void showSettingDialog() {
         AnnSettingDialog dialog = new AnnSettingDialog();
-        dialog.setSize(500, 500);
+        dialog.setSize(800, 500);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }

@@ -112,7 +112,7 @@ public class AnnSettingDialog extends JDialog {
 
     private void showPublicParamsDialog() {
         PublicParamsDialog dialog = new PublicParamsDialog(setting);
-        dialog.setSize(500, 500);
+        dialog.setSize(800, 500);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }

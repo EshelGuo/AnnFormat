@@ -49,6 +49,7 @@
             </constraints>
             <properties>
               <text value="上移"/>
+              <toolTipText value="所有数据都上移一行, 删除遇到的第一个空行"/>
             </properties>
           </component>
           <component id="afb5" class="javax.swing.JButton" binding="btnLineDown">
@@ -57,6 +58,7 @@
             </constraints>
             <properties>
               <text value="下移"/>
+              <toolTipText value="所有数据都下移一行"/>
             </properties>
           </component>
           <component id="1de57" class="javax.swing.JButton" binding="btnInsert">
@@ -65,6 +67,7 @@
             </constraints>
             <properties>
               <text value="插入"/>
+              <toolTipText value="在第n行后插入1条数据, 如需在第一行前边插入请输入0"/>
             </properties>
           </component>
           <component id="df4d1" class="javax.swing.JTextField" binding="etInsertLineNumber">
@@ -75,7 +78,9 @@
                 <maximum-size width="50" height="-1"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <toolTipText value="在第n行后插入1条数据, 如需在第一行前边插入请输入0"/>
+            </properties>
           </component>
           <component id="c7162" class="javax.swing.JButton" binding="delete" default-binding="true">
             <constraints>
