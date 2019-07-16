@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.esehl.ann.format</id>
   <name>AnnFormat</name>
-  <version>1.05</version>
+  <version>1.1.0</version>
   <vendor email="support@test.com" url="http://www.test.com">Eshel</vendor>
 
   <description><![CDATA[
@@ -11,6 +11,7 @@
   <change-notes><![CDATA[
       1.0.4: 修复get未加static的BUG
       1.0.5: 优化Setting界面, 添加上移, 下移, 插入功能
+      1.1.0: 新增公参配置
     ]]>
   </change-notes>
 

@@ -60,6 +60,18 @@ public abstract class BaseTableModel<T extends TableData> extends AbstractTableM
         fireTableDataChanged();
     }
 
+    public void remove(int row){
+        mData.remove(row);
+        fireTableDataChanged();
+    }
+
+    public void remove(int[] rows){
+        for (int i = rows.length - 1; i >= 0; i--) {
+            mData.remove(rows[i]);
+        }
+        fireTableDataChanged();
+    }
+
     public void addEmptyDataToFirst(int size){
         addData(createEmptyDatas(size), 0);
     }
@@ -74,19 +86,24 @@ public abstract class BaseTableModel<T extends TableData> extends AbstractTableM
         addData(createEmptyData(), line);
     }
 
-    public void lineUp(){
-        if(Util.isEmpty(mData))
+    public void lineUp() {
+        if (Util.isEmpty(mData))
             return;
         Iterator<T> it = mData.iterator();
 
-        while (it.hasNext()){
+        while (it.hasNext()) {
             T next = it.next();
-            if(isEmptyData(next)){
+            if (isEmptyData(next)) {
                 it.remove();
                 break;
             }
         }
-        fireTableDataChanged();
+
+        if (!isEmptyData(mData.get(mData.size() - 1))){
+            addEmptyDataToLast(1);
+        } else {
+            fireTableDataChanged();
+        }
     }
 
     public void lineDown(){

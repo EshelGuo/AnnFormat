@@ -186,7 +186,12 @@ public class AnnWriteCommandAction extends WriteCommandAction.Simple {
                 if (i != 0) {
                     sb.append(", ");
                 }
-                sb.append("@Params(\"").append(param.getName()).append("\")").append(param.type).append(" ").append(param.getName());
+
+                if(param.isPublishParams()){
+                    sb.append(param.type).append(" ").append(param.getName());
+                }else {
+                    sb.append("@Params(\"").append(param.getName()).append("\")").append(param.type).append(" ").append(param.getName());
+                }
             }
         }
         sb.append(");");

@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 /**
  * Created by EshelGuo on 2019/6/20.
@@ -20,6 +21,10 @@ public class AnnFormat extends AnAction {
             setting.typeMap.put("type", "int");
             setting.typeMap.put("Type", "int");
             setting.isFirstOpen = false;
+            setting.publicParams = new LinkedList<>();
+            setting.publicParams.add(new PublicParamsTableModel.Table(
+                    "roomId,roomType", "roomPublicParams", "直播间公参", "JSONObject"
+            ));
             setting.save();
         }
         AnnFormatDialog dialog = new AnnFormatDialog(e);

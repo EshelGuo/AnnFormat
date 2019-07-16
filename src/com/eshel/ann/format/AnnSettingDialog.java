@@ -17,6 +17,8 @@ public class AnnSettingDialog extends JDialog {
     private JButton btnInsert;
     private JTextField etInsertNumber;
     private JButton lineUp;
+    private JButton publicParamsSetting;
+    private JButton delete;
     private final AnnSetting setting;
     private AnnSettingTableModel adapter;
 
@@ -75,6 +77,8 @@ public class AnnSettingDialog extends JDialog {
         cbUseConst.setSelected(setting.useConst);
         cbUseConst.addItemListener(e -> setting.useConst = e.getStateChange() == ItemEvent.SELECTED);
         initTable();
+        publicParamsSetting.addActionListener(e -> showPublicParamsDialog());
+        delete.addActionListener(e -> adapter.remove(table.getSelectedRows()));
     }
 
     private void initTable() {
@@ -104,6 +108,13 @@ public class AnnSettingDialog extends JDialog {
     private void onCancel() {
         // add your code here if necessary
         dispose();
+    }
+
+    private void showPublicParamsDialog() {
+        PublicParamsDialog dialog = new PublicParamsDialog(setting);
+        dialog.setSize(500, 500);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
     }
 /*
     public static void main(String[] args) {

@@ -189,16 +189,31 @@ public class AnnFormatPresenter {
                 paramsSourceData = paramsSourceData.trim()//.replace("{", ",").replace("}", ",")
                     .replace("：", ":").replaceAll(":+", ":").replace("，", ",");
                 en.params = Params.findParams(paramsSourceData);
-//                System.out.println(en);
+                en.params = Params.parsePublicParams(en.params);
             }
             return en;
         }
     }
 
     public static class Params{
+        private boolean isPublishParams;
         private String name;
         String doc;
         String type = "String";
+
+        public Params() {
+        }
+
+        public Params(boolean isPublishParams, String name, String doc, String type) {
+            this.isPublishParams = isPublishParams;
+            this.name = name;
+            this.doc = doc;
+            this.type = type;
+        }
+
+        public boolean isPublishParams() {
+            return isPublishParams;
+        }
 
         @Override
         public String toString() {
@@ -298,6 +313,42 @@ public class AnnFormatPresenter {
                 }
             }
             return 0;
+        }
+
+        public static List<Params> parsePublicParams(List<Params> normalParams) {
+            if(Util.isEmpty(normalParams))
+                return normalParams;
+            //clone setting 中的公参
+            List<PublicParamsTableModel.Table> publicParams = Util.cloneList(AnnSetting.load().publicParams);
+
+            for (PublicParamsTableModel.Table publicParam : publicParams) {
+
+                String[] normalParamNames = publicParam.getParams();
+                if(Util.isEmpty(normalParamNames))
+                    continue;
+                List<Params> findedNormalParams = new ArrayList<>(normalParamNames.length);
+                for (String normalParamName : normalParamNames) {
+                    Params findedNormalParam = findByName(normalParams, normalParamName);
+                    if(findedNormalParam == null)
+                        break;
+                    findedNormalParams.add(findedNormalParam);
+                }
+                if(findedNormalParams.size() == normalParamNames.length){
+                    normalParams.removeAll(findedNormalParams);
+                    normalParams.add(0, new Params(true, publicParam.getName(), publicParam.getDesc(), publicParam.getType()));
+                }
+            }
+            return normalParams;
+        }
+
+        public static Params findByName(List<Params> params, String name){
+            if(Util.isEmpty(params))
+                return null;
+            for (Params param : params) {
+                if(param.name.equals(name) && !param.isPublishParams())
+                    return param;
+            }
+            return null;
         }
     }
 

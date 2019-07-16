@@ -1,6 +1,8 @@
 package com.eshel.core.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,5 +69,20 @@ public class Util {
                 return i;
         }
         return -1;
+    }
+
+    public static <T> List<T> cloneList(List<T> list){
+        if(isEmpty(list))
+            return list;
+        List<T> arrayList = new ArrayList<>(list.size());
+        for (T t : list) {
+            if(t instanceof Cloneable) {
+                Object clone = ((Cloneable)t).clone();
+                arrayList.add((T) clone);
+            }else {
+                arrayList.add(t);
+            }
+        }
+        return arrayList;
     }
 }
