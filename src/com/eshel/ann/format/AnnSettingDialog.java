@@ -1,7 +1,12 @@
 package com.eshel.ann.format;
 
+import com.eshel.core.util.Log;
+
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -79,6 +84,7 @@ public class AnnSettingDialog extends JDialog {
         initTable();
         publicParamsSetting.addActionListener(e -> showPublicParamsDialog());
         delete.addActionListener(e -> adapter.remove(table.getSelectedRows()));
+        Log.setDefaultUncaughtExceptionHandler();
     }
 
     private void initTable() {

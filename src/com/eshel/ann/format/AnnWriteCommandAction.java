@@ -3,6 +3,7 @@ package com.eshel.ann.format;
 import com.eshel.ann.format.AnnFormatPresenter.EN;
 import com.eshel.ann.format.AnnFormatPresenter.PT;
 import com.eshel.ann.format.AnnFormatPresenter.Params;
+import com.eshel.core.util.Log;
 import com.eshel.core.util.PsiUtils;
 import com.eshel.core.util.Util;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -12,6 +13,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ import java.util.Map;
  */
 public class AnnWriteCommandAction extends WriteCommandAction.Simple {
 
+    private static final String TAG = "AnnWriteCommandAction";
     private Map<PT, List<EN>> mDatas;
     private AnActionEvent event;
     AnnWriteCommandAction(AnActionEvent event, Map<PT, List<EN>> codes) {
@@ -33,6 +36,7 @@ public class AnnWriteCommandAction extends WriteCommandAction.Simple {
         // 获取光标所在类, 如果是接口则返回, 不是则查找其中的内部类
         Map<PT, PsiClass> map = new HashMap<>();
         PsiClass currentClass = PsiUtils.getCurrentClass(event);
+        Log.d(TAG, currentClass.toString());
 
         PsiClass[] innerClasses;
         if(currentClass.isInterface()){
@@ -40,12 +44,21 @@ public class AnnWriteCommandAction extends WriteCommandAction.Simple {
         }else {
             innerClasses = currentClass.getInnerClasses();
         }
+        if(innerClasses != null){
+            Log.w(TAG, String.valueOf(innerClasses.length));
+            Log.w(TAG, Arrays.toString(innerClasses));
+        }
 
         for (PsiClass innerClass : innerClasses) {
+            Log.d(TAG, innerClass.toString());
             if(innerClass.isInterface()){
+                Log.d(TAG, "innerClass is interface");
                 PT pt = getPTFromAnno(innerClass, innerClass.getModifierList().getAnnotations());
                 if(pt != null){
+                    Log.d(TAG, "PT not null");
                     map.put(pt, innerClass);
+                }else {
+                    Log.d(TAG, "PT is null");
                 }
             }
         }
@@ -80,11 +93,15 @@ public class AnnWriteCommandAction extends WriteCommandAction.Simple {
 
     private PT getPTFromAnno(PsiClass currentClass, PsiAnnotation[] annotations) {
         if(Util.isEmpty(annotations)){
+            Log.e(TAG, "注解为空");
             return null;
         }
+        Log.e(TAG, Arrays.toString(annotations));
 
         for (PsiAnnotation annotation : annotations) {
-            if("PT".equals(annotation.getQualifiedName())){
+
+            if("PT".equals(annotation.getQualifiedName()) || "com.wobo.census.ann.PT".equals(annotation.getQualifiedName())){
+                Log.e(TAG, "anno name is PT");
                 String ptName = annotation.findAttributeValue("value").getText();
                 String pt = ptName.replace("\"", "").replace("PT_", "").replace("PT", "");
                 Integer iPT = Util.toInteger(pt);
@@ -93,7 +110,10 @@ public class AnnWriteCommandAction extends WriteCommandAction.Simple {
                     if(PT != null)
                         pt = PT;
                 }
+                Log.w(TAG, "pt: "+pt);
                 return new PT(pt);
+            }else {
+                Log.e(TAG, annotation.getQualifiedName());
             }
         }
         return null;

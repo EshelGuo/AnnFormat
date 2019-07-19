@@ -1,5 +1,6 @@
 package com.eshel.ann.format;
 
+import com.eshel.core.util.Log;
 import com.eshel.core.util.Util;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 
@@ -34,6 +35,7 @@ public class AnnFormatDialog extends JDialog {
 
         contentPane.registerKeyboardAction(e13 -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         btnSetting.addActionListener(action -> showSettingDialog());
+        Log.setDefaultUncaughtExceptionHandler();
     }
 
     private void showSettingDialog() {
@@ -44,6 +46,7 @@ public class AnnFormatDialog extends JDialog {
     }
 
     private void onOK() {
+        Log.setDefaultUncaughtExceptionHandler();
         String content = etContent.getText();
         if(Util.notEmpty(content)) {
             mPresenter.insertCode(content);

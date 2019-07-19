@@ -1,5 +1,6 @@
 package com.eshel.ann.format;
 
+import com.eshel.core.util.Log;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 
@@ -13,6 +14,7 @@ public class AnnFormat extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
+        Log.setDefaultUncaughtExceptionHandler();
         AnnSetting setting = AnnSetting.load();
         if(setting.isFirstOpen){
             setting.typeMap = new LinkedHashMap<>();
@@ -31,5 +33,6 @@ public class AnnFormat extends AnAction {
         dialog.setSize(500, 500);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
+        Log.e("TEST", "test");
     }
 }

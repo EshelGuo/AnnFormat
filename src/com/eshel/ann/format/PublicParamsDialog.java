@@ -1,5 +1,6 @@
 package com.eshel.ann.format;
 
+import com.eshel.core.util.Log;
 import com.eshel.core.util.Util;
 
 import javax.swing.*;
@@ -58,7 +59,10 @@ public class PublicParamsDialog extends JDialog {
             int[] rows = table.getSelectedRows();
             mAdapter.remove(rows);
         });
+        Log.setDefaultUncaughtExceptionHandler();
     }
+
+
 
     private void initTable() {
         table.setRowHeight((int) (table.getRowHeight()*1.5f));
