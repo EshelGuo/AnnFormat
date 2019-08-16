@@ -161,7 +161,18 @@ public class Log {
                         msg == null ? "null" : msg
                 );
                 if (sWriter == null) {
-                    File appDir = FileSystemView.getFileSystemView() .getHomeDirectory();
+                    File desktop = FileSystemView.getFileSystemView() .getHomeDirectory();
+                    File appDir;
+                    appDir = new File(desktop, "AnnFormatLog");
+                    if(!appDir.exists() || !appDir.isDirectory()) {
+                        boolean mkdir = appDir.mkdir();
+                        if(!mkdir){
+                            appDir = desktop;
+                        }
+                    }else {
+                        if(appDir == null)
+                            appDir = desktop;
+                    }
                     if (appDir != null && appDir.exists()) {
                         File logFile = new File(appDir, Log.TAG + ".log");
                         if (!logFile.exists() || !logFile.isFile()) {
@@ -195,12 +206,19 @@ public class Log {
      * 设置全局异常捕获并保存至文件
      */
     public static void setDefaultUncaughtExceptionHandler() {
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+        //请继承 ErrorReportSubmitter
+        //在 plugin.xml 中配置以下代码:
+        // <extensions defaultExtensionNs="com.intellij">
+        //      <!-- Add your extensions here -->
+        //      <errorHandler implementation="com.eshel.ann.format.MyErrorReportSubmitter"/>
+        // </extensions>
+        /*Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread t, Throwable e) {
                 Log.logE(t.toString());
                 printError(e);
             }
         });
+        Thread.currentThread().setUncaughtExceptionHandler(Thread.getDefaultUncaughtExceptionHandler());*/
     }
 }

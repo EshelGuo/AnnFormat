@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PublicParamsDialog extends JDialog {
+
+    public static final String TAG = PublicParamsDialog.class.getSimpleName();
+
     private JPanel contentPane;
     private JButton ok;
     private JButton buttonCancel;
@@ -59,7 +62,8 @@ public class PublicParamsDialog extends JDialog {
             int[] rows = table.getSelectedRows();
             mAdapter.remove(rows);
         });
-        Log.setDefaultUncaughtExceptionHandler();
+
+        Log.d(TAG, "public params dialog showing");
     }
 
 

@@ -28,8 +28,8 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
+    <errorHandler implementation="com.eshel.ann.format.MyErrorReportSubmitter"/>
   </extensions>
-
   <actions>
     <!-- Add your actions here -->
     <action id="AnnFormat" class="com.eshel.ann.format.AnnFormat" text="AnnFormat" description="AnnFormat">

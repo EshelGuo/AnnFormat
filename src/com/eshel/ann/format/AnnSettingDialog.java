@@ -11,6 +11,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class AnnSettingDialog extends JDialog {
+
+    public static final String TAG = AnnSettingDialog.class.getSimpleName();
+
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -84,7 +87,7 @@ public class AnnSettingDialog extends JDialog {
         initTable();
         publicParamsSetting.addActionListener(e -> showPublicParamsDialog());
         delete.addActionListener(e -> adapter.remove(table.getSelectedRows()));
-        Log.setDefaultUncaughtExceptionHandler();
+        Log.d(TAG, "setting dialog showing");
     }
 
     private void initTable() {

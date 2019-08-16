@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class AnnFormatDialog extends JDialog {
+    public static final String TAG = AnnFormatDialog.class.getSimpleName();
     private JPanel contentPane;
     private JButton btnOK;
     private JButton btnCancel;
@@ -35,7 +36,8 @@ public class AnnFormatDialog extends JDialog {
 
         contentPane.registerKeyboardAction(e13 -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         btnSetting.addActionListener(action -> showSettingDialog());
-        Log.setDefaultUncaughtExceptionHandler();
+        Log.d(TAG, "format dialog showing");
+        throw new NullPointerException("TEST .... test");
     }
 
     private void showSettingDialog() {
@@ -46,7 +48,6 @@ public class AnnFormatDialog extends JDialog {
     }
 
     private void onOK() {
-        Log.setDefaultUncaughtExceptionHandler();
         String content = etContent.getText();
         if(Util.notEmpty(content)) {
             mPresenter.insertCode(content);

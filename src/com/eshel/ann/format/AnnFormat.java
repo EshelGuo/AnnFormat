@@ -12,9 +12,19 @@ import java.util.LinkedList;
  */
 public class AnnFormat extends AnAction {
 
+    public static final String TAG = AnnFormat.class.getSimpleName();
+
     @Override
     public void actionPerformed(AnActionEvent e) {
-        Log.setDefaultUncaughtExceptionHandler();
+        try {
+            actionPerformedInternal(e);
+        }catch(Exception exception){
+            exception.printStackTrace();
+            Log.printStackTrace(exception);
+        }
+    }
+
+    private void actionPerformedInternal(AnActionEvent e) {
         AnnSetting setting = AnnSetting.load();
         if(setting.isFirstOpen){
             setting.typeMap = new LinkedHashMap<>();
@@ -33,6 +43,7 @@ public class AnnFormat extends AnAction {
         dialog.setSize(500, 500);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-        Log.e("TEST", "test");
+        Log.d(TAG, "program start");
+//        throw new NullPointerException("TEST .... test");
     }
 }
