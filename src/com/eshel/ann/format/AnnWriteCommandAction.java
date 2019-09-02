@@ -144,7 +144,7 @@ public class AnnWriteCommandAction extends WriteCommandAction.Simple {
         PT pt = getMorePTFromDatas();
         PsiClass interfaceClass = tagetInterfaces.get(pt);
         String methodName = "public static " + interfaceClass.getQualifiedName() + " get() {\n" +
-                "return AnnInterfaceFactory.get(" + interfaceClass.getQualifiedName() + ".class);\n" +
+                "return AnnProxy.create(" + interfaceClass.getQualifiedName() + ".class);\n" +
                 "}\n";
         PsiUtils.createMethodFromTextAdd(currentClass, methodName);
     }

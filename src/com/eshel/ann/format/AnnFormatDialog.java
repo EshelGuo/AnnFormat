@@ -37,7 +37,6 @@ public class AnnFormatDialog extends JDialog {
         contentPane.registerKeyboardAction(e13 -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         btnSetting.addActionListener(action -> showSettingDialog());
         Log.d(TAG, "format dialog showing");
-        throw new NullPointerException("TEST .... test");
     }
 
     private void showSettingDialog() {
