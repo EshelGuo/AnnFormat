@@ -5,7 +5,9 @@ import com.eshel.core.util.Util;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class AnnFormatDialog extends JDialog {
     public static final String TAG = AnnFormatDialog.class.getSimpleName();
@@ -35,15 +37,8 @@ public class AnnFormatDialog extends JDialog {
         });
 
         contentPane.registerKeyboardAction(e13 -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        btnSetting.addActionListener(action -> showSettingDialog());
+        btnSetting.addActionListener(action -> AnnSettingDialog.showSetting(e));
         Log.d(TAG, "format dialog showing");
-    }
-
-    private void showSettingDialog() {
-        AnnSettingDialog dialog = new AnnSettingDialog();
-        dialog.setSize(800, 500);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
     }
 
     private void onOK() {

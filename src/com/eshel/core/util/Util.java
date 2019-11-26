@@ -1,5 +1,9 @@
 package com.eshel.core.util;
 
+import javax.swing.filechooser.FileSystemView;
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -84,5 +88,18 @@ public class Util {
             }
         }
         return arrayList;
+    }
+
+    public static void closeIO(Closeable closeable){
+        try {
+            if(closeable != null)
+                closeable.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static File getDisktop(){
+        return FileSystemView.getFileSystemView().getHomeDirectory();
     }
 }

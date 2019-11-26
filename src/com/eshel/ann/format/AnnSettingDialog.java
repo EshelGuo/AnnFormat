@@ -1,12 +1,22 @@
 package com.eshel.ann.format;
 
+import com.eshel.core.Dialog;
 import com.eshel.core.util.Log;
+import com.eshel.core.util.Util;
+import com.google.gson.Gson;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.Consumer;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -27,10 +37,21 @@ public class AnnSettingDialog extends JDialog {
     private JButton lineUp;
     private JButton publicParamsSetting;
     private JButton delete;
-    private final AnnSetting setting;
+    private JButton btnImport;
+    private JButton btnExport;
+    private AnnSetting setting;
     private AnnSettingTableModel adapter;
+    private AnActionEvent event;
 
-    public AnnSettingDialog() {
+    public static void showSetting(AnActionEvent event){
+        AnnSettingDialog dialog = new AnnSettingDialog(event);
+        dialog.setSize(800, 500);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }
+
+    public AnnSettingDialog(AnActionEvent event) {
+        this.event = event;
         setting = AnnSetting.load();
         setContentPane(contentPane);
         setModal(true);
@@ -40,12 +61,14 @@ public class AnnSettingDialog extends JDialog {
         buttonCancel.addActionListener(e -> onCancel());
         lineDown.addActionListener(e -> adapter.lineDown());
         lineUp.addActionListener(e -> adapter.lineUp());
+        btnExport.addActionListener(e -> exportSetting());
+        btnImport.addActionListener(e -> importSetting());
         btnInsert.addActionListener(e -> {
-            try{
+            try {
                 String text = etInsertNumber.getText();
                 Integer position = Integer.valueOf(text);
                 adapter.insertLine(position);
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
@@ -68,18 +91,18 @@ public class AnnSettingDialog extends JDialog {
         ButtonGroup group = new ButtonGroup();
         group.add(rbDocComment);
         group.add(rbLineComment);
-        if(setting.useSignLineDoc){
+        if (setting.useSignLineDoc) {
             rbLineComment.setSelected(true);
-        }else {
+        } else {
             rbDocComment.setSelected(true);
         }
 
         rbLineComment.addItemListener(e -> {
-            if(e.getStateChange() == ItemEvent.SELECTED)
+            if (e.getStateChange() == ItemEvent.SELECTED)
                 setting.useSignLineDoc = true;
         });
         rbDocComment.addItemListener(e -> {
-            if(e.getStateChange() == ItemEvent.SELECTED)
+            if (e.getStateChange() == ItemEvent.SELECTED)
                 setting.useSignLineDoc = false;
         });
         cbUseConst.setSelected(setting.useConst);
@@ -90,8 +113,65 @@ public class AnnSettingDialog extends JDialog {
         Log.d(TAG, "setting dialog showing");
     }
 
+    private void importSetting() {
+        File disktop = Util.getDisktop();
+        File config = new File(disktop, "AnnFormatConfig.json");
+
+        File defaultFile = disktop;
+        if(config.exists() && config.isFile()){
+            defaultFile = config;
+        }
+        VirtualFile defaultVFile = LocalFileSystem.getInstance().findFileByIoFile(defaultFile);
+        FileChooserDescriptor fcd = new FileChooserDescriptor(true, false, false, false, false, false);
+        FileChooser.chooseFile(fcd, event.getProject(), defaultVFile, new Consumer<VirtualFile>() {
+            @Override
+            public void consume(VirtualFile virtualFile) {
+                importSettingImpl(virtualFile);
+
+            }
+        });
+    }
+
+    private void importSettingImpl(VirtualFile virtualFile) {
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+        try {
+            br = new BufferedReader(new InputStreamReader(virtualFile.getInputStream()));
+            String line;
+            while ((line = br.readLine()) != null){
+                sb.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            Util.closeIO(br);
+        }
+        String json = sb.toString();
+        AnnSetting setting = new Gson().fromJson(json, AnnSetting.class);
+        setting.save();
+        dispose();
+        showSetting(event);
+    }
+
+    private void exportSetting() {
+        String data = new Gson().toJson(setting, AnnSetting.class);
+        File desktop = Util.getDisktop();
+        File output = new File(desktop, "AnnFormatConfig.json");
+        BufferedWriter br = null;
+        try {
+            br = new BufferedWriter(new FileWriter(output, false));
+            br.write(data);
+            br.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            Util.closeIO(br);
+        }
+        Dialog.showSuccess("配置文件 AnnFormatConfig.json 已保存至桌面");
+    }
+
     private void initTable() {
-        table.setRowHeight((int) (table.getRowHeight()*1.5f));
+        table.setRowHeight((int) (table.getRowHeight() * 1.5f));
         adapter = new AnnSettingTableModel();
         table.setModel(adapter);
         adapter.addData(setting.typeMap);

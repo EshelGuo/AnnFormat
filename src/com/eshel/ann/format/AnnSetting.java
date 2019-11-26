@@ -32,4 +32,8 @@ public class AnnSetting extends BaseConfig{
         if(setting != null)
             setting.save();
     }
+
+    public void isFirstOpen(float versionCode){
+
+    }
 }
