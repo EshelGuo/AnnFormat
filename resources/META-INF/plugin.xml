@@ -46,13 +46,16 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
-    <errorHandler implementation="com.eshel.ann.format.MyErrorReportSubmitter"/>
+    <errorHandler implementation="plugins.eshel.ann.format.MyErrorReportSubmitter"/>
   </extensions>
   <actions>
     <!-- Add your actions here -->
-    <action id="AnnFormat" class="com.eshel.ann.format.AnnFormat" text="AnnFormat" description="AnnFormat">
+    <action id="AnnFormat" class="plugins.eshel.ann.format.AnnFormat" text="AnnFormat" description="AnnFormat">
       <add-to-group group-id="GenerateGroup" anchor="last"/>
     </action>
+<!--    <action id="RightClickAction" class="plugins.eshel.RightClickAction" text="RightClickAction" description="RightClickAction">
+      <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+    </action>-->
   </actions>
 
 </idea-plugin>
