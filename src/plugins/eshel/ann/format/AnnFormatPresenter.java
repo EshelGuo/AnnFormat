@@ -16,6 +16,7 @@
 
 package plugins.eshel.ann.format;
 
+import plugins.eshel.core.util.Log;
 import plugins.eshel.core.util.Util;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +27,7 @@ import java.util.*;
  * Created by EshelGuo on 2019/6/21.
  */
 public class AnnFormatPresenter {
+    public static final String TAG = AnnFormatPresenter.class.getSimpleName();
     private AnActionEvent action;
 
     public AnnFormatPresenter(AnActionEvent e) {
@@ -37,7 +39,8 @@ public class AnnFormatPresenter {
         if (Util.isEmpty(formatedCode)) {
             return;
         }
-        System.out.println(formatedCode);
+        Log.i(TAG, formatedCode.toString());
+//        System.out.println(formatedCode);
 
         new AnnWriteCommandAction(action, formatedCode).execute();
     }
@@ -50,15 +53,17 @@ public class AnnFormatPresenter {
         if(Util.isEmpty(lines)){
             return new HashMap<>();
         }
-
+        Log.i(TAG, "开始解析表格");
         Map<PT, List<EN>> result = new HashMap<>();
 
+        PT lastPT = null;
         for (String line : lines) {
+            Log.i(TAG, "开始解析行: " + line);
             line = line.trim();
             line = line.replaceAll("\\t+", "\t");
             String[] temp = line.split("\\t");
             ArrayList<String> sourceData = new ArrayList<>(Arrays.asList(temp));
-            EN en = EN.create(sourceData);
+            EN en = EN.create(sourceData, lastPT);
             if(en == null)
                 continue;
             List<EN> ens = null;
@@ -75,6 +80,7 @@ public class AnnFormatPresenter {
             if(ens == null){
                 ens = new ArrayList<>();
                 key = en.PT;
+                lastPT = key;
                 result.put(key, ens);
             }else {
                 if(key.doc == null && en.PT.doc != null){
@@ -82,6 +88,7 @@ public class AnnFormatPresenter {
                 }
             }
             ens.add(en);
+            Log.i(TAG, "解析行完成: " + en);
         }
 
         /*for (Map.Entry<PT, List<EN>> entry : result.entrySet()) {
@@ -148,7 +155,7 @@ public class AnnFormatPresenter {
                     '}';
         }
 
-        private static EN create(@NotNull List<String> sourceData){
+        private static EN create(@NotNull List<String> sourceData, AnnFormatPresenter.PT lastPT){
             if(Util.isEmpty(sourceData))
                 return null;
             EN en = new EN();
@@ -185,7 +192,12 @@ public class AnnFormatPresenter {
             }
 
             if(en.PT.value == null){
-                en.PT.value = String.valueOf(Util.toInteger(en.EN) / 1000 * 1000);
+                int pt = Util.toInteger(en.EN) / 1000 * 1000;
+                if(pt == 0){
+                    en.PT.value = lastPT.value;
+                }else {
+                    en.PT.value = String.valueOf(pt);
+                }
             }
 
             int ptenIndex = ptIndex != -1 ? ptIndex : enIndex;

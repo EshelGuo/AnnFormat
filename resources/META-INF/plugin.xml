@@ -17,7 +17,7 @@
 <idea-plugin version="2">
   <id>com.esehl.ann.format</id>
   <name>AnnFormat</name>
-  <version>1.1.5</version>
+  <version>1.1.6</version>
   <vendor email="support@test.com" url="http://www.test.com">Eshel</vendor>
 
   <description><![CDATA[
@@ -32,6 +32,7 @@
       1.1.3: 加入日志工具, 修复生成代码时生成重复内部接口的BUG, 以及在内部接口中使用alt+install打开插件不能正常生成代码的问题
       1.1.4: 解决日志工具不能捕获崩溃问题
       1.1.5: 增加设置导入导出功能
+      1.1.6: 添加处理流程日志输出
     ]]>
   </change-notes>
 
@@ -47,15 +48,16 @@
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
     <errorHandler implementation="plugins.eshel.ann.format.MyErrorReportSubmitter"/>
+    <!--<toolWindow id="MyConsole" icon="/icon/ic_export_13.png" anchor="bottom" factoryClass="plugins.eshel.test.ConsoleToolWindowFactory"/>-->
   </extensions>
   <actions>
     <!-- Add your actions here -->
     <action id="AnnFormat" class="plugins.eshel.ann.format.AnnFormat" text="AnnFormat" description="AnnFormat">
       <add-to-group group-id="GenerateGroup" anchor="last"/>
     </action>
-<!--    <action id="RightClickAction" class="plugins.eshel.RightClickAction" text="RightClickAction" description="RightClickAction">
-      <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
-    </action>-->
+    <!--<action id="RightClickAction" class="plugins.eshel.RightClickAction" text="RightClickAction" description="RightClickAction">-->
+      <!--<add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>-->
+    <!--</action>-->
   </actions>
 
 </idea-plugin>

@@ -21,9 +21,11 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.vfs.VirtualFile;
+import plugins.eshel.test.Datas;
 
 /**
  * Created by eshel on 2019/12/5.
+ * 测试使用, 无实际用途
  */
 @SuppressWarnings("ComponentNotRegistered")
 public class RightClickAction extends AnAction {
@@ -32,5 +34,6 @@ public class RightClickAction extends AnAction {
     public void actionPerformed(AnActionEvent event) {
         VirtualFile file = event.getData(DataKeys.VIRTUAL_FILE);
         Log.i("RightClickAction", file.getPath());
+        Datas.addData(file.getPath());
     }
 }

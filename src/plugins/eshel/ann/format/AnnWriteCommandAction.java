@@ -136,13 +136,21 @@ public class AnnWriteCommandAction extends WriteCommandAction.Simple {
     @Override
     protected void run() throws Throwable {
 //        generateImport();
-        generateConst();
-        Runnable[] runnables = new Runnable[1];
-        Map<PT, PsiClass> tagetInterfaces = getTagetInterface(runnables);
-        generateGet(tagetInterfaces);
-        generateMethod(tagetInterfaces);
-        if(runnables.length > 0 && runnables[0] != null)
-            runnables[0].run();
+        try {
+            generateConst();
+            Log.i(TAG, "生成常量完成");
+            Runnable[] runnables = new Runnable[1];
+            Map<PT, PsiClass> tagetInterfaces = getTagetInterface(runnables);
+            generateGet(tagetInterfaces);
+            Log.i(TAG, "get方法生成成功");
+            generateMethod(tagetInterfaces);
+            Log.i(TAG, "EN 方法生成成功");
+            if(runnables.length > 0 && runnables[0] != null)
+                runnables[0].run();
+            Log.i(TAG, "代码生成完成");
+        }catch(Exception exception){
+            Log.logE("AnnWriteCommandAction error: ", exception);
+        }
     }
 
     private void generateImport() {
