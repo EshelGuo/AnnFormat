@@ -17,8 +17,8 @@
 <idea-plugin version="2">
   <id>com.esehl.ann.format</id>
   <name>AnnFormat</name>
-  <version>1.1.6</version>
-  <vendor email="support@test.com" url="http://www.test.com">Eshel</vendor>
+  <version>1.1.7</version>
+  <vendor email="shiwen.gsw@gmail.com" url="https://github.com/EshelGuo/AnnFormat">Eshel</vendor>
 
   <description><![CDATA[
       用于生成埋点代码.
@@ -33,6 +33,7 @@
       1.1.4: 解决日志工具不能捕获崩溃问题
       1.1.5: 增加设置导入导出功能
       1.1.6: 添加处理流程日志输出
+      1.1.7: 添加对 EN < 1000 的处理
     ]]>
   </change-notes>
 
