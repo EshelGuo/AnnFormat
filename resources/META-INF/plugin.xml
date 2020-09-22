@@ -17,7 +17,7 @@
 <idea-plugin version="2">
   <id>com.esehl.ann.format</id>
   <name>AnnFormat</name>
-  <version>1.1.7</version>
+  <version>1.1.8</version>
   <vendor email="shiwen.gsw@gmail.com" url="https://github.com/EshelGuo/AnnFormat">Eshel</vendor>
 
   <description><![CDATA[
