@@ -163,28 +163,29 @@ public class AnnFormatPresenter {
             int ptIndex = -1;
             int enIndex = -1;
 
+            ArrayList<Integer> temp = new ArrayList<>(2);
+            ArrayList<Integer> tempIndex = new ArrayList<>(2);
+
             for (int i = 0; i < sourceData.size(); i++) {
                 String data = sourceData.get(i).trim();
 
                 Integer integer = Util.toInteger(data);
                 if(integer != null){
-                    if(integer % 1000 == 0){
-                        if(ptIndex != -1)
-                            continue;
-                        ptIndex = i;
-                        en.PT = new PT();
-                        en.PT.value = integer.toString();
-                    }else {
-                        if(enIndex != -1)
-                            continue;
-                        enIndex = i;
-                        en.EN = integer.toString();
-                    }
+                    temp.add(integer);
+                    tempIndex.add(i);
                 }
             }
 
-            if(en.EN == null) {
-                return null;
+            if(temp.size() >= 2){
+                ptIndex = tempIndex.get(0);
+                enIndex = tempIndex.get(1);
+                en.PT = new PT();
+                en.PT.value = String.valueOf(temp.get(0));
+                en.EN = temp.get(1).toString();
+            } else {
+                enIndex = tempIndex.get(0);
+                en.PT = lastPT;
+                en.EN = temp.get(0).toString();
             }
 
             if(en.PT == null){
@@ -193,11 +194,7 @@ public class AnnFormatPresenter {
 
             if(en.PT.value == null){
                 int pt = Util.toInteger(en.EN) / 1000 * 1000;
-                if(pt == 0){
-                    en.PT.value = lastPT.value;
-                }else {
-                    en.PT.value = String.valueOf(pt);
-                }
+                en.PT.value = String.valueOf(pt);
             }
 
             int ptenIndex = ptIndex != -1 ? ptIndex : enIndex;
@@ -208,7 +205,10 @@ public class AnnFormatPresenter {
             }
 
             if(ptDocIndex >= 0){
-                en.PT.doc = sourceData.get(ptDocIndex);
+                String ptDoc = sourceData.get(ptDocIndex);
+                if(ptDoc != null) {
+                    en.doc = ptDoc + "-" + en.doc;
+                }
             }
 
             int paramsIndex = enIndex + 1;
